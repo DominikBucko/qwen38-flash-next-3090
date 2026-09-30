@@ -1,6 +1,6 @@
 # One RTX 3090 + 64 GB RAM: benchmarks, September 30, 2026
 
-**2,106 tok/s prefill on a 131K-token prompt and 47–50 tok/s decode**, with the default
+**Up to 2,106 tok/s prefill on a 131K-token prompt and 43–51 tok/s decode**, with the default
 [`configs/3090-64gb-128k.env`](../../configs/3090-64gb-128k.env) profile on one RTX 3090 and a machine limited to
 64 GB of RAM. The images were built with [`docker/Dockerfile`](../../docker/Dockerfile) from this tree and started
 with [`scripts/docker_serve.sh`](../../scripts/docker_serve.sh).
@@ -26,14 +26,18 @@ runs. No request was preempted.
 
 ## Results, release image
 
-32 cores (the whole benchmark CPU; automatic CPU pool: 24 threads):
+32 cores (the whole benchmark CPU; automatic CPU pool: 24 threads). Run 1 used the image built locally from this
+tree, run 2 the published image `ghcr.io/dominikbucko/qwen38-flash-next-3090@sha256:7f176605…` pulled by digest
+(its overlay differs from run 1's only in one code comment):
 
 | Request (input + output) | First token | Prefill tok/s | Decode tok/s |
 |---|---:|---:|---:|
-| 131,099 + 512 | 62.2 s | **2,106** | **47.4** |
-| 32,799 + 512 | 15.3 s | 2,141 | 50.3 |
-| 8,218 + 1,024 | 5.2 s | 1,570 | 49.1 |
-| 4,127 + 256, first request after the start | 3.3 s | 1,258 | 47.8 |
+| 131,099 + 512 | 62.2 / 90.3 s | **2,106** / 1,451 | **47.4** / 43.3 |
+| 32,799 + 512 | 15.3 / 14.8 s | 2,141 / 2,219 | 50.3 / 49.5 |
+| 8,218 + 1,024 | 5.2 / 5.7 s | 1,570 / 1,452 | 49.1 / 48.5 |
+| 4,127 + 256, first request after the start | 3.3 / 3.4 s | 1,258 / 1,231 | 47.8 / 50.8 |
+
+Run 2's 131K request and both 8K requests took the slow prefill path (see the known issue below).
 
 Peaks: GPU memory 23,369 MiB of 24,576, GPU 67–68 °C, container memory at its 56.0 GiB limit (52–53 GiB
 anonymous, of which the expert arena is 46.0 GiB on huge pages; the rest is page cache), CPU Tctl 86–88 °C.
@@ -51,7 +55,8 @@ desktop CPUs with DDR5 have more bandwidth per core, so real desktops may do bet
 
 | Container CPUs | Like | CPU pool | 4K + 256 | 32K + 512 | 131K + 512 | 8K + 1,024 |
 |---|---|---|---|---|---|---|
-| 32 cores, 4 CCDs | the benchmark machine | 24 threads | 1,258 / 47.8 | 2,141 / 50.3 | 2,106 / 47.4 | 1,570 / 49.1 |
+| 32 cores, 4 CCDs, run 1 | the benchmark machine | 24 threads | 1,258 / 47.8 | 2,141 / 50.3 | 2,106 / 47.4 | 1,570 / 49.1 |
+| 32 cores, 4 CCDs, run 2 (published image) | | 24 threads | 1,231 / 50.8 | 2,219 / 49.5 | 1,451 / 43.3 | 1,452 / 48.5 |
 | 16 cores, 2 CCDs (`0-15,32-47`), run 1 | Ryzen 9 7950X / 9950X | 12 threads | 1,200 / 45.2 | 2,192 / 44.9 | 1,452 / 39.3 | 2,026 / 46.2 |
 | 16 cores, 2 CCDs, run 2 | | 12 threads | 1,268 / 42.1 | 2,102 / 44.9 | 2,104 / 40.5 | 1,419 / 46.8 |
 | 8 cores, 1 CCD (`0-7,32-39`), earlier image | Ryzen 7 7800X3D / 9700X | 6 threads | 1,108 / 35.5 | 2,133 / 35.5 | 2,149 / 33.6 | 1,951 / 34.6 |
@@ -63,9 +68,10 @@ stays at ~2,100 tok/s when it takes the fast path.
 
 A prefill chunk of 8,192 tokens normally takes ~3.7 s. In some requests every chunk takes ~5.5 s instead: the
 NVMe reads of the experts that are not in RAM and the GPU work stop overlapping. It hits the single-chunk 8K
-request in about half of all runs (5.2–6.0 s instead of 4.0–4.3 s to the first token). On the 16-core proxy it
-hit the 131K request in 5 of 6 runs without the prefill event markers (`QWEN38_STREAM_MARKERS`) and in 1 of 6
-with them, so the release turns them on. Moving the NVMe reads out of Python (one GIL-free C++ call per layer),
+request in about half of all runs (5.2–6.0 s instead of 4.0–4.3 s to the first token), and the 131K request in
+some runs on every configuration tried. On the 16-core proxy it hit the 131K request in 5 of 6 runs without the
+prefill event markers (`QWEN38_STREAM_MARKERS`) and in 1 of 6 with them, so the release turns them on; on 32
+cores the release image hit it in 1 of 2 runs. Moving the NVMe reads out of Python (one GIL-free C++ call per layer),
 deeper read-ahead buffers and limiting how far the host runs ahead of the GPU did not remove it. The cause is
 still open; reports from other machines are welcome.
 

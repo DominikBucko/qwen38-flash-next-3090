@@ -88,8 +88,8 @@ tool calling and reasoning parsers. What differs:
 | KV cache | BF16 | INT8 per token and head |
 | PLE table | In RAM | On NVMe |
 | Context | 135,168 tokens | 135,168 tokens |
-| Prefill, 131K prompt | 3,029 tok/s | 2,106 tok/s |
-| Decode | ~110 tok/s | 47–50 tok/s |
+| Prefill, 131K prompt | 3,029 tok/s | 1,451–2,106 tok/s |
+| Decode | ~110 tok/s | 43–51 tok/s |
 
 ## Numerical checks
 

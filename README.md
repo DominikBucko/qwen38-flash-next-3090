@@ -1,8 +1,8 @@
 # Qwen3.8-Flash-Next on a single RTX 3090 (24 GB) + 64 GB RAM
 
-<h2 align="center">2,100 tok/s prefill · 47–50 tok/s decode · 128K context</h2>
+<h2 align="center">2,100 tok/s prefill · 47 tok/s decode · 128K context</h2>
 <p align="center"><strong>One RTX 3090 24 GB · 64 GB system RAM · vLLM · OpenAI-compatible API · Docker</strong></p>
-<p align="center">A 131,099-token prompt reaches the first token in 62 s (2,106 tok/s), then decodes at 47.4 tok/s.</p>
+<p align="center">One request, best of 2: a 131,099-token prompt reaches the first token in 62 s (2,106 tok/s), then decodes at 47.4 tok/s.</p>
 <p align="center">
   <a href="https://huggingface.co/albucino/Qwen3.8-Flash-Next-W4A16-FP8PLE"><strong>Download the checkpoint</strong></a> ·
   <a href="#quick-start">Quick start</a> ·
@@ -24,27 +24,28 @@ hardware. Nothing is pruned or requantized.
 ## Results
 
 One RTX 3090, the machine limited to **64 GB of RAM** (the server container to 56 GiB), release image, default
-profile, one request at a time, greedy decoding with MTP speculative decoding, on a fresh server start:
+profile, one request at a time, greedy decoding with MTP speculative decoding. Two runs on fresh server starts,
+one with the image built locally and one with the published image pulled by digest:
 
 | Request (input + output tokens) | First token | Prefill | Decode |
 |---|---:|---:|---:|
-| 131,099 + 512 | 62.2 s | **2,106 tok/s** | **47.4 tok/s** |
-| 32,799 + 512 | 15.3 s | 2,141 tok/s | 50.3 tok/s |
-| 8,218 + 1,024 | 5.2 s | 1,570 tok/s | 49.1 tok/s |
-| 4,127 + 256, first request after start | 3.3 s | 1,258 tok/s | 47.8 tok/s |
+| 131,099 + 512 | 62.2 / 90.3 s | **2,106** / 1,451 tok/s | **47.4** / 43.3 tok/s |
+| 32,799 + 512 | 15.3 / 14.8 s | 2,141 / 2,219 tok/s | 50.3 / 49.5 tok/s |
+| 8,218 + 1,024 | 5.2 / 5.7 s | 1,570 / 1,452 tok/s | 49.1 / 48.5 tok/s |
+| 4,127 + 256, first request after start | 3.3 / 3.4 s | 1,258 / 1,231 tok/s | 47.8 / 50.8 tok/s |
 
 ![Prefill and decode speed on one RTX 3090 with 64 GB RAM](docs/images/results.svg)
 
-GPU memory peaked at 23.4 GB and no request was preempted. Prefill runs at ~2,100 tok/s for prompts of 32K
-tokens and more; some requests take a slower path (see [known issue](benchmarks/2026-09-30/README.md#known-issue-occasional-slow-prefill-steps)),
-like the 8K request above (4.0–4.3 s to the first token in about half of all runs).
+GPU memory peaked at 23.4 GB and no request was preempted. Prefill runs at 2,100–2,200 tok/s when the expert
+reads from NVMe overlap the GPU work; some requests take a slower path, ~1,450 tok/s (the second 131K run and
+both 8K requests above). See the [known issue](benchmarks/2026-09-30/README.md#known-issue-occasional-slow-prefill-steps).
 
 **Decode depends mainly on RAM bandwidth**, because the CPU computes the cold experts. With the server restricted
 to part of the 32-core benchmark CPU:
 
 | CPU cores available | Like | Prefill, 131K prompt | Decode |
 |---|---|---:|---:|
-| 32 (4 CCDs) | the benchmark workstation | 2,106 tok/s | 47–50 tok/s |
+| 32 (4 CCDs), 2 runs | the benchmark workstation | 1,451–2,106 tok/s | 43–51 tok/s |
 | 16 (2 CCDs), 2 runs | Ryzen 9 7950X / 9950X | 1,452–2,104 tok/s | 39–47 tok/s |
 | 8 (1 CCD), earlier image | Ryzen 7 7800X3D / 9700X | 2,149 tok/s | 34–36 tok/s |
 
@@ -86,9 +87,15 @@ make serve
 
 `make serve` runs `scripts/preflight.sh` first, which checks the GPU, RAM, CPU, driver and disk. The server is
 ready after about 4 minutes (the first start compiles kernels and takes longer) and listens on
-`http://127.0.0.1:8000/v1`. To skip the local build, use the published image
-(`IMAGE=ghcr.io/dominikbucko/qwen38-flash-next-3090:<tag> make serve`, pinned by the digest in the
-[release notes](https://github.com/DominikBucko/qwen38-flash-next-3090/releases)).
+`http://127.0.0.1:8000/v1`.
+
+To skip the local build, use the published v0.1.0 image (weights stay a separate download):
+
+```bash
+IMAGE=ghcr.io/dominikbucko/qwen38-flash-next-3090@sha256:7f176605b59c462af21b1b62fd854f9f3cca96e3d11a295581297483d45490a3 make serve
+```
+
+Later releases list their digests in the [release notes](https://github.com/DominikBucko/qwen38-flash-next-3090/releases).
 
 Check it and measure your machine:
 

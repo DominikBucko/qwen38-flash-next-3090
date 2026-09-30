@@ -21,9 +21,10 @@ the [hardware report form](https://github.com/DominikBucko/qwen38-flash-next-309
 
 ### How fast is it?
 
-On the benchmark machine (limited to 64 GB of RAM), a 131,072-token prompt prefills at about 2,100 tokens per
-second (62 s to the first token), and decode runs at 47–50 tokens per second. With 16 or 8 cores of the same CPU,
-decode drops to about 45 and 35 tok/s. See the [README](../README.md#results) and the
+On the benchmark machine (limited to 64 GB of RAM), a 131,072-token prompt prefills at 1,450–2,100 tokens per
+second (62–90 s to the first token, depending on a [known issue](../benchmarks/2026-09-30/README.md#known-issue-occasional-slow-prefill-steps)),
+and decode runs at 43–51 tokens per second. With 16 or 8 cores of the same CPU, decode drops to about 45 and 35
+tok/s. See the [README](../README.md#results) and the
 [benchmark report](../benchmarks/2026-09-30/README.md). Decode depends mostly on your RAM bandwidth.
 
 ### Which CPU do I need?

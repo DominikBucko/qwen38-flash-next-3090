@@ -70,6 +70,63 @@
    ]
   },
   {
+   "id": "release-32c-ghcr",
+   "kind": "release",
+   "description": "Published GHCR image pulled by digest, 32 cores",
+   "container_cpus": "all 64 CPUs",
+   "raw": "raw/release-32c-ghcr.json",
+   "results": [
+    {
+     "requested_input": 4096,
+     "requested_output": 256,
+     "prompt_tokens": 4127,
+     "completion_tokens": 256,
+     "ttft_s": 3.353,
+     "total_s": 8.372,
+     "prefill_tok_s": 1230.7,
+     "decode_tok_s": 50.81,
+     "preemptions": 0.0,
+     "accepted_per_draft": 2.146
+    },
+    {
+     "requested_input": 32768,
+     "requested_output": 512,
+     "prompt_tokens": 32799,
+     "completion_tokens": 512,
+     "ttft_s": 14.779,
+     "total_s": 25.102,
+     "prefill_tok_s": 2219.3,
+     "decode_tok_s": 49.5,
+     "preemptions": 0.0,
+     "accepted_per_draft": 1.977
+    },
+    {
+     "requested_input": 131072,
+     "requested_output": 512,
+     "prompt_tokens": 131099,
+     "completion_tokens": 512,
+     "ttft_s": 90.343,
+     "total_s": 102.141,
+     "prefill_tok_s": 1451.1,
+     "decode_tok_s": 43.31,
+     "preemptions": 0.0,
+     "accepted_per_draft": 2.31
+    },
+    {
+     "requested_input": 8192,
+     "requested_output": 1024,
+     "prompt_tokens": 8218,
+     "completion_tokens": 1024,
+     "ttft_s": 5.659,
+     "total_s": 26.737,
+     "prefill_tok_s": 1452.1,
+     "decode_tok_s": 48.54,
+     "preemptions": 0.0,
+     "accepted_per_draft": 2.196
+    }
+   ]
+  },
+  {
    "id": "release-16c-run1",
    "kind": "release",
    "description": "Release image, 16-core proxy (2 CCDs, auto: 12-thread pool)",
