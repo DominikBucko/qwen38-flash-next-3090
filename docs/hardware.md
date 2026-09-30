@@ -52,5 +52,9 @@ Tips for desktops:
 
 - **96–128 GB RAM, one GPU**: the whole expert set fits in RAM; decode never reads experts from NVMe. The
   default `auto` settings pick this up.
-- **Two RTX 3090s and 128 GB**: use [qwen38-flash-next-2x3090](https://github.com/DominikBucko/qwen38-flash-next-2x3090),
-  which keeps all cold-expert work on the GPUs: ~3,000 tok/s prefill and ~110 tok/s decode.
+- **Two RTX 3090s and 64 GB**: use the [64 GB profile](https://github.com/DominikBucko/qwen38-flash-next-2x3090#new-64-gb-ram-profile)
+  of [qwen38-flash-next-2x3090](https://github.com/DominikBucko/qwen38-flash-next-2x3090). It applies this
+  runtime's design to both cards, each owning half of the experts: 3,410 tok/s prefill and 84 tok/s decode on a
+  131K prompt.
+- **Two RTX 3090s and 128 GB**: the same repository's 128 GB profiles keep all cold-expert work on the GPUs:
+  ~3,000 tok/s prefill and ~110 tok/s decode.

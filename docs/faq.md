@@ -27,6 +27,13 @@ and decode runs at 43–51 tokens per second. With 16 or 8 cores of the same CPU
 tok/s. See the [README](../README.md#results) and the
 [benchmark report](../benchmarks/2026-09-30/README.md). Decode depends mostly on your RAM bandwidth.
 
+### I have two RTX 3090s but only 64 GB of RAM. Which runtime?
+
+The [64 GB profile](https://github.com/DominikBucko/qwen38-flash-next-2x3090#new-64-gb-ram-profile) of the
+2× RTX 3090 runtime. It uses this repository's design on both cards: each GPU owns its most-used experts, and the
+CPU and GPU share the rest. On the benchmark machine limited to 64 GB, a 131K prompt prefilled at 3,410 tok/s and
+decoded at 84 tok/s.
+
 ### Which CPU do I need?
 
 Any x86-64 CPU with AVX2 (Ryzen, Intel Core since 2013). The CPU computes the cold experts during decode, so
