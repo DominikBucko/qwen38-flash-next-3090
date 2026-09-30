@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "checkpoint": {
+    "repo": "albucino/Qwen3.8-Flash-Next-W4A16-FP8PLE",
+    "revision": "ef554143369a706525336f6b42a09094835dc077",
+    "note": "Same checkpoint as the 2x RTX 3090 runtime: Intel AutoRound W4A16 target, FP8 PLE table, INT4 MTP draft."
+  },
+  "runtime": {
+    "base_image": "ghcr.io/dominikbucko/qwen38-flash-next-2x3090@sha256:139e796cf3375c26f08a005762bbbf2d1d5495d9fe9e7b3c858dbe506550dd33",
+    "base_image_release": "https://github.com/DominikBucko/qwen38-flash-next-2x3090/releases/tag/v0.4.0",
+    "vllm_version": "0.1.dev20073+g8e685d198",
+    "humming_kernels_version": "0.1.12",
+    "profile": "configs/3090-64gb-128k.env",
+    "tensor_parallel_size": 1,
+    "hot_experts_per_layer": 32,
+    "kv_cache_dtype": "int8_per_token_head",
+    "max_model_len": 135168,
+    "mtp_depth": 3,
+    "max_num_seqs": 1
+  },
+  "validated_hardware": {
+    "gpu": "1x NVIDIA GeForce RTX 3090 24 GB",
+    "system_memory": "64 GiB (128 GB host limited with a memory balloon; serving container capped at 56 GiB)"
+  }
+}

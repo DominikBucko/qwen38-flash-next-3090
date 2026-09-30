@@ -1,0 +1,15 @@
+.DS_Store
+.env
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+/jit-cache/
+/results/
+/models/
+*.safetensors
+*.gguf
+*.bin
+*.pt
+*.pth
+*.log

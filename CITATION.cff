@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+title: "Qwen3.8-Flash-Next on a single RTX 3090 + 64 GB RAM: hybrid CPU/GPU MoE runtime for vLLM"
+message: "If you use this runtime, please cite this repository and the upstream model repositories."
+type: software
+authors:
+  - family-names: "Bucko"
+    given-names: "Dominik"
+version: 0.1.0
+date-released: 2026-09-30
+license: Apache-2.0
+repository-code: "https://github.com/DominikBucko/qwen38-flash-next-3090"
+keywords:
+  - Qwen3.8-Flash-Next
+  - RTX 3090
+  - single GPU
+  - mixture of experts
+  - CPU offload
+  - vLLM
+  - long context
+  - INT8 KV cache

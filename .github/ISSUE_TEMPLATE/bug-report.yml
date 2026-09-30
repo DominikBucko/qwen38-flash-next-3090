@@ -1,0 +1,32 @@
+name: Bug report
+description: The server fails, crashes, or produces wrong output.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware and system
+      description: GPU, CPU, RAM, OS, kernel, NVIDIA driver, image tag or commit; output of `make preflight`.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: settings
+    attributes:
+      label: Settings
+      description: Variables you changed in `.env`, and the `[qwen38-3090]` lines from the server log.
+      render: text
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: The last ~100 lines of the server log around the failure. Redact private paths and prompts.
+      render: text

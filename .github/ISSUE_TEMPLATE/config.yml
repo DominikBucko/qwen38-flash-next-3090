@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions and ideas (Discussions)
+    url: https://github.com/DominikBucko/qwen38-flash-next-3090/discussions
+    about: Setup questions, tuning ideas, and results that are not bugs.
+  - name: Two GPUs? The 2x RTX 3090 runtime
+    url: https://github.com/DominikBucko/qwen38-flash-next-2x3090
+    about: 2x RTX 3090 + 128 GB RAM, ~3,000 tok/s prefill and ~110 tok/s decode.

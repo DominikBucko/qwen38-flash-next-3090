@@ -1,0 +1,35 @@
+# docker compose --env-file .env -f docker/compose.yaml up -d      (run from the repository root)
+# Compose cannot derive the memory limit from MemTotal: 54g suits a 64 GB machine (MemTotal ~62.5 GiB - 8 GiB).
+# Set COMPOSE_MEMORY_LIMIT in .env for other sizes.
+services:
+  qwen38-flash-next-3090:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: ${IMAGE:-qwen38-flash-next-3090:local}
+    container_name: qwen38-flash-next-3090
+    ipc: host
+    cap_add:
+      - SYS_PTRACE
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    mem_limit: ${COMPOSE_MEMORY_LIMIT:-54g}
+    memswap_limit: ${COMPOSE_MEMORY_LIMIT:-54g}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["${GPU_DEVICE:-0}"]
+              capabilities: [gpu]
+    ports:
+      - "127.0.0.1:${PORT:-8000}:${PORT:-8000}"
+    environment:
+      PORT: "${PORT:-8000}"
+    volumes:
+      - "${MODEL_DIR:?Set MODEL_DIR}:/model:ro"
+      - "../jit-cache/humming:/root/.humming"
+      - "../jit-cache/triton:/root/.triton"
+    command: ["/model"]
+    restart: unless-stopped

@@ -1,0 +1,60 @@
+{
+ "host": {
+  "python": "3.14.4",
+  "kernel": "7.0.0-30-generic",
+  "cpu": "AMD Ryzen Threadripper PRO 5975WX 32-Cores",
+  "mem_total_gib": 123.7,
+  "gpu": "NVIDIA GeForce RTX 3090, 24576 MiB, 595.84"
+ },
+ "base_url": "http://127.0.0.1:18088",
+ "results": [
+  {
+   "requested_input": 4096,
+   "requested_output": 256,
+   "prompt_tokens": 4127,
+   "completion_tokens": 256,
+   "ttft_s": 3.255,
+   "total_s": 9.308,
+   "prefill_tok_s": 1267.9,
+   "decode_tok_s": 42.13,
+   "preemptions": 0.0,
+   "accepted_per_draft": 2.146
+  },
+  {
+   "requested_input": 32768,
+   "requested_output": 512,
+   "prompt_tokens": 32799,
+   "completion_tokens": 512,
+   "ttft_s": 15.601,
+   "total_s": 26.97,
+   "prefill_tok_s": 2102.4,
+   "decode_tok_s": 44.94,
+   "preemptions": 0.0,
+   "accepted_per_draft": 1.954
+  },
+  {
+   "requested_input": 131072,
+   "requested_output": 512,
+   "prompt_tokens": 131099,
+   "completion_tokens": 512,
+   "ttft_s": 62.315,
+   "total_s": 74.93,
+   "prefill_tok_s": 2103.8,
+   "decode_tok_s": 40.51,
+   "preemptions": 0.0,
+   "accepted_per_draft": 2.295
+  },
+  {
+   "requested_input": 8192,
+   "requested_output": 1024,
+   "prompt_tokens": 8218,
+   "completion_tokens": 1024,
+   "ttft_s": 5.793,
+   "total_s": 27.642,
+   "prefill_tok_s": 1418.5,
+   "decode_tok_s": 46.82,
+   "preemptions": 0.0,
+   "accepted_per_draft": 2.157
+  }
+ ]
+}

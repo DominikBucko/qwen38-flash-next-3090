@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="960" height="470" rx="14" fill="#ffffff"/>
+<text x="32" y="46" font-size="22" font-weight="800" fill="#111827">Qwen3.8-Flash-Next on one RTX 3090 (24 GB) + 64 GB RAM</text>
+<text x="32" y="72" font-size="14" fill="#6b7280">RTX 3090, machine limited to 64 GB RAM (container 56 GiB), release image, one request at a time</text>
+<text x="32" y="114" font-size="17" font-weight="700" fill="#111827">Prefill</text>
+<text x="32" y="134" font-size="13" fill="#6b7280">input tokens / time to first token (tok/s)</text>
+<line x1="160.0" y1="150" x2="160.0" y2="384" stroke="#e5e7eb"/>
+<text x="160.0" y="402" font-size="11" fill="#6b7280" text-anchor="middle">0</text>
+<line x1="232.5" y1="150" x2="232.5" y2="384" stroke="#e5e7eb"/>
+<text x="232.5" y="402" font-size="11" fill="#6b7280" text-anchor="middle">625</text>
+<line x1="305.0" y1="150" x2="305.0" y2="384" stroke="#e5e7eb"/>
+<text x="305.0" y="402" font-size="11" fill="#6b7280" text-anchor="middle">1,250</text>
+<line x1="377.5" y1="150" x2="377.5" y2="384" stroke="#e5e7eb"/>
+<text x="377.5" y="402" font-size="11" fill="#6b7280" text-anchor="middle">1,875</text>
+<line x1="450.0" y1="150" x2="450.0" y2="384" stroke="#e5e7eb"/>
+<text x="450.0" y="402" font-size="11" fill="#6b7280" text-anchor="middle">2,500</text>
+<text x="32" y="180" font-size="13.5" fill="#111827">131,099 + 512</text>
+<rect x="160" y="156" width="244.3" height="36" rx="5" fill="#2563eb"/>
+<text x="412.3" y="180" font-size="15" font-weight="700" fill="#111827">2,106</text>
+<text x="32" y="242" font-size="13.5" fill="#111827">32,799 + 512</text>
+<rect x="160" y="218" width="248.3" height="36" rx="5" fill="#2563eb"/>
+<text x="416.3" y="242" font-size="15" font-weight="700" fill="#111827">2,141</text>
+<text x="32" y="304" font-size="13.5" fill="#111827">8,218 + 1,024</text>
+<rect x="160" y="280" width="182.1" height="36" rx="5" fill="#2563eb"/>
+<text x="350.1" y="304" font-size="15" font-weight="700" fill="#111827">1,570</text>
+<text x="32" y="366" font-size="13.5" fill="#111827">4,127 + 256 *</text>
+<rect x="160" y="342" width="145.9" height="36" rx="5" fill="#2563eb"/>
+<text x="313.9" y="366" font-size="15" font-weight="700" fill="#111827">1,258</text>
+<text x="500" y="114" font-size="17" font-weight="700" fill="#111827">Decode</text>
+<text x="500" y="134" font-size="13" fill="#6b7280">output tokens / s after the first token</text>
+<line x1="628.0" y1="150" x2="628.0" y2="384" stroke="#e5e7eb"/>
+<text x="628.0" y="402" font-size="11" fill="#6b7280" text-anchor="middle">0</text>
+<line x1="700.5" y1="150" x2="700.5" y2="384" stroke="#e5e7eb"/>
+<text x="700.5" y="402" font-size="11" fill="#6b7280" text-anchor="middle">15</text>
+<line x1="773.0" y1="150" x2="773.0" y2="384" stroke="#e5e7eb"/>
+<text x="773.0" y="402" font-size="11" fill="#6b7280" text-anchor="middle">30</text>
+<line x1="845.5" y1="150" x2="845.5" y2="384" stroke="#e5e7eb"/>
+<text x="845.5" y="402" font-size="11" fill="#6b7280" text-anchor="middle">45</text>
+<line x1="918.0" y1="150" x2="918.0" y2="384" stroke="#e5e7eb"/>
+<text x="918.0" y="402" font-size="11" fill="#6b7280" text-anchor="middle">60</text>
+<text x="500" y="180" font-size="13.5" fill="#111827">131,099 + 512</text>
+<rect x="628" y="156" width="229.1" height="36" rx="5" fill="#ea7a24"/>
+<text x="865.1" y="180" font-size="15" font-weight="700" fill="#111827">47.4</text>
+<text x="500" y="242" font-size="13.5" fill="#111827">32,799 + 512</text>
+<rect x="628" y="218" width="243.0" height="36" rx="5" fill="#ea7a24"/>
+<text x="879.0" y="242" font-size="15" font-weight="700" fill="#111827">50.3</text>
+<text x="500" y="304" font-size="13.5" fill="#111827">8,218 + 1,024</text>
+<rect x="628" y="280" width="237.4" height="36" rx="5" fill="#ea7a24"/>
+<text x="873.4" y="304" font-size="15" font-weight="700" fill="#111827">49.1</text>
+<text x="500" y="366" font-size="13.5" fill="#111827">4,127 + 256 *</text>
+<rect x="628" y="342" width="231.2" height="36" rx="5" fill="#ea7a24"/>
+<text x="867.2" y="366" font-size="15" font-weight="700" fill="#111827">47.8</text>
+<text x="32" y="452" font-size="12" fill="#6b7280">* first request after the server start. Requests are input + output tokens, run one at a time. Source: benchmarks/2026-09-30/summary.json</text>
+</svg>
