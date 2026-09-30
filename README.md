@@ -56,7 +56,7 @@ memory bandwidth per core and may do better. See the [benchmark report](benchmar
 With a second RTX 3090, the [2× RTX 3090 runtime](https://github.com/DominikBucko/qwen38-flash-next-2x3090)
 reaches 3,410 tok/s prefill and 84 tok/s decode with the same 64 GB of RAM (its
 [64 GB profile](https://github.com/DominikBucko/qwen38-flash-next-2x3090#new-64-gb-ram-profile), which uses this
-runtime's design on both cards), or 3,029 and 109.8 tok/s with 128 GB.
+runtime's design on both cards), or up to 4,191 tok/s prefill and 111.5 tok/s decode with 128 GB.
 
 ## What you need
 
@@ -159,8 +159,8 @@ The runtime picks the CPU cores and the RAM arena size from your machine. Detail
 
 - [qwen38-flash-next-2x3090](https://github.com/DominikBucko/qwen38-flash-next-2x3090): the same model on two
   RTX 3090s, either with 64 GB of RAM ([64 GB profile](https://github.com/DominikBucko/qwen38-flash-next-2x3090#new-64-gb-ram-profile):
-  3,410 tok/s prefill, 84 tok/s decode, 128K context) or with 128 GB (3,029 tok/s prefill, 110 tok/s decode, up
-  to 256K context).
+  3,410 tok/s prefill, 84 tok/s decode, 128K context) or with 128 GB (up to 4,191 tok/s prefill and 111.5 tok/s
+  decode, up to 256K context).
 - [albucino/Qwen3.8-Flash-Next-W4A16-FP8PLE](https://huggingface.co/albucino/Qwen3.8-Flash-Next-W4A16-FP8PLE):
   the checkpoint (Intel AutoRound W4A16 target, FP8 PLE table, INT4 MTP draft).
 

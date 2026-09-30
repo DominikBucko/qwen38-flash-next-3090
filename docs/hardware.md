@@ -57,4 +57,4 @@ Tips for desktops:
   runtime's design to both cards, each owning half of the experts: 3,410 tok/s prefill and 84 tok/s decode on a
   131K prompt.
 - **Two RTX 3090s and 128 GB**: the same repository's 128 GB profiles keep all cold-expert work on the GPUs:
-  ~3,000 tok/s prefill and ~110 tok/s decode.
+  up to ~4,200 tok/s prefill (prefill profile) and ~110 tok/s decode (agent profile).
