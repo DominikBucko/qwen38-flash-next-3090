@@ -64,7 +64,8 @@ runtime's design on both cards), or up to 4,191 tok/s prefill and 111.5 tok/s de
 - **RAM:** 64 GB. With 96 GB or more every expert stays in RAM.
 - **CPU:** x86-64 with AVX2 (any Ryzen, Intel Core since 2013).
 - **Disk:** an NVMe SSD with ~130 GB free: the checkpoint is also read while serving.
-- **Software:** Linux, Docker, the NVIDIA Container Toolkit, NVIDIA driver 580 or newer.
+- **Software:** Linux, Docker, the NVIDIA Container Toolkit, NVIDIA driver 580 or newer. WSL2 on Windows 11
+  works with two settings, see [WSL2](docs/hardware.md#wsl2).
 
 ## Quick start
 
@@ -153,7 +154,7 @@ The runtime picks the CPU cores and the RAM arena size from your machine. Detail
   open. See the [benchmark report](benchmarks/2026-09-30/README.md#known-issue-occasional-slow-prefill-steps).
 - The INT8 KV cache is checked with greedy-decoding agreement only (within run-to-run noise of BF16); no
   likelihood or benchmark-suite comparison yet.
-- Linux only.
+- Linux, or WSL2 on Windows 11 with the [WSL2 settings](docs/hardware.md#wsl2).
 
 ## Related
 

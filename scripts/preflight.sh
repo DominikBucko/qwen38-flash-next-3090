@@ -87,6 +87,8 @@ if [[ -n "${MODEL_DIR:-}" ]]; then
     disk=${parent:-$dev}
     if [[ "$disk" == nvme* ]]; then
       ok "checkpoint on NVMe ($disk)"
+    elif [[ "$(uname -r)" == *[Mm]icrosoft* ]]; then
+      warn "WSL2: the virtual disk ($disk) hides the physical drive; keep the checkpoint on the distribution's ext4 disk and that disk on an NVMe drive (docs/hardware.md#wsl2)"
     elif [[ "$(cat "/sys/block/$disk/queue/rotational" 2>/dev/null || echo 0)" == 1 ]]; then
       error "the checkpoint is on a spinning disk ($disk); the runtime reads it continuously, use an NVMe SSD"
     else

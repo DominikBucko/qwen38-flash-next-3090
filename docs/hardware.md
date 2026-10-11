@@ -48,6 +48,41 @@ Tips for desktops:
 - Keep other memory-heavy programs closed while generating: they share the same bandwidth.
 - If the 3090 also drives your display, see [GPU memory](tuning.md#gpu-memory).
 
+## WSL2
+
+Tested on Windows 11 (WSL2 kernel 6.6, Ubuntu 26.04, NVIDIA driver 617) with an RTX 3090, a Ryzen 9 9950X3D
+(16 cores, 2 CCDs) and 96 GB of DDR5-6400, the WSL VM limited to 88 GB. Docker Engine and the NVIDIA Container
+Toolkit run inside the distribution (not Docker Desktop). Results with the default profile except
+`QWEN38_HOT_ONLY=28`, every cold expert in RAM:
+
+| Request (input + output tokens) | First token | Prefill | Decode |
+|---|---:|---:|---:|
+| 131,099 + 512 | 64.5 s | 2,033 tok/s | 50.8 tok/s |
+| 32,799 + 512 | 15.2 s | 2,152 tok/s | 44.6 tok/s |
+| 8,218 + 1,024 | 3.9 s | 2,113 tok/s | 47.5 tok/s |
+| 4,127 + 256, first request after start | 3.5 s | 1,179 tok/s | 46.5 tok/s |
+
+What differs from Linux:
+
+- **Pinned memory.** vLLM keeps pinned memory off under WSL unless `VLLM_WSL2_ENABLE_PIN_MEMORY=1` is set; without
+  it the server stops with `UVA is not available`. Set it in `.env`.
+- **Registered memory has its own device address.** Under WSL2, memory pinned with `cudaHostRegister` (the expert
+  arena) is not mapped at the same address on the GPU as on the CPU, so the GPU-share kernels use the address from
+  `cudaHostGetDevicePointer` (identical to the host address on Linux). Without this the first decode step fails
+  with an illegal memory access.
+- **VRAM.** Windows reserves part of the card: 24,322 MiB are usable instead of 24,576. With 32 hot experts the
+  server runs out of GPU memory while the MTP draft is repacked (`CUDA driver error: device not ready`);
+  `QWEN38_HOT_ONLY=28` fits.
+- **Disk.** Keep the checkpoint on the distribution's ext4 disk (`/models/...`), not under `/mnt/c` or another
+  Windows drive: the 9P mount is far too slow for the runtime's reads. Put the distribution's `.vhdx` on an NVMe
+  drive (`wsl --manage <distro> --move <dir>`). `preflight.sh` cannot see the physical drive behind the virtual
+  disk and only warns.
+- **RAM.** Set `memory=` in `.wslconfig` for the VM; the container limit (`MEMORY_LIMIT=auto`) is derived from
+  it. 88 GB gives an 80 GiB container and keeps every expert in RAM.
+- **Keep a WSL session open.** WSL2 shuts the VM down about a minute after the last `wsl.exe` session exits,
+  which stops the server. Keep a terminal open, or start a hidden session
+  (`Start-Process -WindowStyle Hidden wsl.exe -ArgumentList '-d','Ubuntu','-e','sleep','infinity'`).
+
 ## More RAM or another GPU
 
 - **96–128 GB RAM, one GPU**: the whole expert set fits in RAM; decode never reads experts from NVMe. The

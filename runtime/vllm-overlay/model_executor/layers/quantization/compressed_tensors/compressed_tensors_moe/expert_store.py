@@ -10,6 +10,7 @@ registered with CUDA so prefill can DMA a group of slots to the GPU and convert 
 The arena is anonymous memory: it is charged to the serving cgroup like any other process memory (a
 cudaHostAlloc'd pool would not be), and after the fill the checkpoint's page cache for these ranges is dropped.
 """
+import ctypes
 import json
 import mmap
 import os
@@ -149,6 +150,13 @@ class ExpertStore:
         err = torch.cuda.cudart().cudaHostRegister(self.base, self.nbytes, 0)
         if int(err) != 0:
             raise RuntimeError(f"expert store: cudaHostRegister failed ({err})")
+        # Device-side address of the arena for the GPU kernels (gpu_share.py). Equal to self.base on native Linux
+        # (UVA); on WSL2 registered memory gets a separate device mapping and reads through the host address fault.
+        dev = ctypes.c_void_p()
+        rc = ctypes.CDLL("libcudart.so.13").cudaHostGetDevicePointer(ctypes.byref(dev), ctypes.c_void_p(self.base), 0)
+        if rc != 0 or not dev.value:
+            raise RuntimeError(f"expert store: cudaHostGetDevicePointer failed ({rc})")
+        self.dev_base = dev.value
         t2 = time.perf_counter()
         self.bytes = torch.frombuffer(self.arena, dtype=torch.uint8)
         # Pointer table for the CPU kernel; hot experts stay 0 (they are skipped).
@@ -208,7 +216,7 @@ class ExpertStore:
                 self.last_use[sl] = -1 - rank[e]
                 if rank[e] < protect:
                     self.slot_protected[sl] = 1
-                    self.gpu_addr[l, e] = self.base + sl * SLOT
+                    self.gpu_addr[l, e] = self.dev_base + sl * SLOT
         tail_n = sum(map(len, self.tail))
         huge = _anon_huge_kib()
         logger.info("Expert store: %d cold experts in the arena (%d-%d per layer), %.2f GiB; huge pages %.1f GiB "

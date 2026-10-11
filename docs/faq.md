@@ -80,8 +80,10 @@ the first start takes longer.
 
 ### Does it run on Windows or WSL2?
 
-It is only tested on Linux. WSL2 with Docker and GPU support may work, but its memory limits and huge-page
-behaviour differ.
+Yes, under WSL2 on Windows 11 with Docker and the NVIDIA Container Toolkit installed inside the distribution,
+with two settings in `.env` (`VLLM_WSL2_ENABLE_PIN_MEMORY=1`, `QWEN38_HOT_ONLY=28`). On a Ryzen 9 9950X3D with
+DDR5-6400 it reached 2,033 tok/s prefill and 50.8 tok/s decode on a 131K prompt. See [WSL2](hardware.md#wsl2)
+for the setup and its limits.
 
 ### Can I use a SATA SSD or a hard disk?
 
